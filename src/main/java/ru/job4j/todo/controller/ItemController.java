@@ -18,31 +18,27 @@ import javax.servlet.http.HttpSession;
 @ThreadSafe
 public class ItemController {
 
-//    private final ItemDbService itemDbService;
-    private final ItemHbItem itemHbItem;
+    private final ItemDbService itemDbService;
 
-    public ItemController(ItemDbService itemDbService, ItemHbItem itemHbItem) {
-//        this.itemDbService = itemDbService;
-        this.itemHbItem = itemHbItem;
+    public ItemController(ItemDbService itemDbService) {
+        this.itemDbService = itemDbService;
     }
 
     @GetMapping("/items")
-    public String index(Model model, HttpSession session) {
-        model.addAttribute("items", itemHbItem.findAll());
+    public String index(Model model) {
+        model.addAttribute("items", itemDbService.findAll());
         return "items";
     }
 
     @GetMapping("/done")
-    public String done(Model model, HttpSession session) {
-        model.addAttribute("items", itemHbItem.findAll());
-//        model.addAttribute("items", itemDbService.findAlldone());
+    public String done(Model model) {
+        model.addAttribute("items", itemDbService.findAlldone());
         return "done";
     }
 
     @PostMapping("/updateItem")
     public String updatePost(@ModelAttribute Item item) {
-//        itemDbService.update(item);
-        itemHbItem.update(item);
+        itemDbService.update(item);
         return "redirect:/items";
     }
 
@@ -56,35 +52,31 @@ public class ItemController {
     public String createItem(HttpServletRequest req) {
         String description = req.getParameter("description");
         Boolean done = Boolean.valueOf(req.getParameter("done"));
-        itemHbItem.add(new Item(1, description, done));
-//        itemDbService.add(new Item(1, description, done));
+        itemDbService.add(new Item(1, description, done));
         return "redirect:/items";
     }
 
     @GetMapping("/formUpdateItem/{itemId}")
     public String formUpdateItem(Model model, @PathVariable("itemId") int id) {
-        model.addAttribute("item", itemHbItem.findById(id));
+        model.addAttribute("item", itemDbService.findById(id));
         return "updateItem";
     }
 
     @GetMapping("/doneItem/{itemId}")
     public String doneItem(Model model, @PathVariable("itemId") int id) {
-        model.addAttribute("item", itemHbItem.update(itemHbItem.findById(id)));
-//        model.addAttribute("item", itemDbService.done(id));
+        model.addAttribute("item", itemDbService.done(id));
         return "redirect:/items";
     }
 
     @GetMapping("/newItems")
     public String newItems(Model model) {
-        model.addAttribute("items", itemHbItem.findAll());
-//        model.addAttribute("items", itemDbService.newItems());
+        model.addAttribute("items", itemDbService.newItems());
         return "newItems";
     }
 
     @GetMapping("/item/{itemId}")
     public String item(Model model, @PathVariable("itemId") int id) {
-        model.addAttribute("item", itemHbItem.findById(id));
-//        model.addAttribute("item", itemDbService.findById(id));
+        model.addAttribute("item", itemDbService.findById(id));
         return "item";
     }
 }
