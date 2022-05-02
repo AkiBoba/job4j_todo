@@ -4,18 +4,17 @@ package ru.job4j.todo.service;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.Item;
-import ru.job4j.todo.store.ItemDbStore;
+import ru.job4j.todo.store.ItemHbItem;
 
 import java.util.Collection;
-import java.util.List;
 
 @Service
 @ThreadSafe
 public class ItemDbService {
 
-    private final ItemDbStore store;
+    private final ItemHbItem store;
 
-    public ItemDbService(ItemDbStore store) {
+    public ItemDbService(ItemHbItem store) {
         this.store = store;
 
     }
@@ -38,6 +37,7 @@ public class ItemDbService {
         store.update(item);
     }
 
+    /*
     public List<Item> newItems() {
         return store.newItems();
     }
@@ -48,5 +48,5 @@ public class ItemDbService {
 
     public List<Item> findAlldone() {
         return store.findAlldone();
-    }
+    } */
 }

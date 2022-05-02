@@ -14,11 +14,13 @@ import java.util.List;
 
 @Repository
 @ThreadSafe
-public class ItemHbItem implements AutoCloseable {
-    private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-            .configure().build();
-    private final SessionFactory sf = new MetadataSources(registry)
-            .buildMetadata().buildSessionFactory();
+public class ItemHbItem {
+
+    private final SessionFactory sf;
+
+    public ItemHbItem(SessionFactory sf) {
+        this.sf = sf;
+    }
 
     public Item add(Item item) {
         Session session = sf.openSession();
@@ -77,9 +79,5 @@ public class ItemHbItem implements AutoCloseable {
         session.getTransaction().commit();
         session.close();
         return result;
-    }
-
-    public void close() throws Exception {
-        StandardServiceRegistryBuilder.destroy(registry);
     }
 }
