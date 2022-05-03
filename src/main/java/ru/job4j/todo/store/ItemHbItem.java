@@ -1,16 +1,20 @@
 package ru.job4j.todo.store;
 
 import net.jcip.annotations.ThreadSafe;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Item;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 @Repository
 @ThreadSafe
@@ -20,6 +24,21 @@ public class ItemHbItem {
 
     public ItemHbItem(SessionFactory sf) {
         this.sf = sf;
+    }
+
+    private <T> T tx(final Function<Session, T> command) {
+        final Session session = sf.openSession();
+        final Transaction tx = session.beginTransaction();
+        try {
+            T rsl = command.apply(session);
+            tx.commit();
+            return rsl;
+        } catch (final Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
     }
 
     public Item add(Item item) {
@@ -51,21 +70,33 @@ public class ItemHbItem {
     }
 
     public List<Item> findAll() {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        List result = session.createQuery("from Item").list();
-        session.getTransaction().commit();
-        session.close();
-        return result;
+        return this.tx(
+            session -> session.createQuery("from Item").list()
+        );
     }
 
-    public List<Item> findByName(String key) {
+    public List<Item> findAlldone() {
         List<Item> items = new ArrayList<>();
         Session session = sf.openSession();
         session.beginTransaction();
         List<Item> result = session.createQuery("from ru.job4j.todo.model.Item").list();
         result.forEach(itm -> {
-            if (key.equals(itm.getDescription())) {
+            if (itm.isDone()) {
+                items.add(itm);
+            }
+        });
+        return items;
+    }
+
+    public List<Item> newItems() {
+        List<Item> items = new ArrayList<>();
+        Session session = sf.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Item.class, "Item");
+        criteria.addOrder(Order.desc("created"));
+        List<Item> result = criteria.list();
+        result.forEach(itm -> {
+            if (!itm.isDone()) {
                 items.add(itm);
             }
         });
@@ -79,5 +110,15 @@ public class ItemHbItem {
         session.getTransaction().commit();
         session.close();
         return result;
+    }
+
+    public void done(int id) {
+        Session session = sf.openSession();
+        session.beginTransaction();
+        Item itmTmp = session.get(Item.class, id);
+        itmTmp.setDone(true);
+        session.update(itmTmp);
+        session.getTransaction().commit();
+        session.close();
     }
 }

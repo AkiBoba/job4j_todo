@@ -32,7 +32,7 @@ public class ItemController {
 
     @GetMapping("/done")
     public String done(Model model) {
-       /* model.addAttribute("items", itemDbService.findAlldone());*/
+       model.addAttribute("items", itemDbService.findAlldone());
         return "done";
     }
 
@@ -63,14 +63,14 @@ public class ItemController {
     }
 
     @GetMapping("/doneItem/{itemId}")
-    public String doneItem(Model model, @PathVariable("itemId") int id) {
-       /* model.addAttribute("item", itemDbService.done(id));*/
+    public String doneItem(@PathVariable("itemId") int id) {
+        itemDbService.done(id);
         return "redirect:/items";
     }
 
     @GetMapping("/newItems")
     public String newItems(Model model) {
-       /* model.addAttribute("items", itemDbService.newItems());*/
+        model.addAttribute("items", itemDbService.newItems());
         return "newItems";
     }
 
@@ -78,5 +78,11 @@ public class ItemController {
     public String item(Model model, @PathVariable("itemId") int id) {
         model.addAttribute("item", itemDbService.findById(id));
         return "item";
+    }
+
+    @GetMapping("/deleteItem/{itemId}")
+    public String deleteItem(@PathVariable("itemId") int id) {
+        itemDbService.delete(id);
+        return "redirect:/items";
     }
 }

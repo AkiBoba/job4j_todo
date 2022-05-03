@@ -8,4 +8,4 @@
 
 Класс Main.
 
-2. Создать TODO list [#3786] - on hiber
+2. Создать TODO list [#3786] - on hiber исправление и доработка

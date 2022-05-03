@@ -7,6 +7,7 @@ import ru.job4j.todo.model.Item;
 import ru.job4j.todo.store.ItemHbItem;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 @ThreadSafe
@@ -37,16 +38,19 @@ public class ItemDbService {
         store.update(item);
     }
 
-    /*
     public List<Item> newItems() {
         return store.newItems();
     }
 
-    public Item done(int id) {
-        return store.done(id);
+    public void done(int id) {
+        store.done(id);
     }
 
     public List<Item> findAlldone() {
         return store.findAlldone();
-    } */
+    }
+
+    public void delete(int id) {
+        store.delete(id);
+    }
 }
