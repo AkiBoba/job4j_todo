@@ -26,21 +26,6 @@ public class ItemHbItem {
         this.sf = sf;
     }
 
-    private <T> T tx(final Function<Session, T> command) {
-        final Session session = sf.openSession();
-        final Transaction tx = session.beginTransaction();
-        try {
-            T rsl = command.apply(session);
-            tx.commit();
-            return rsl;
-        } catch (final Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        } finally {
-            session.close();
-        }
-    }
-
     public Item add(Item item) {
         Session session = sf.openSession();
         session.beginTransaction();
@@ -70,9 +55,12 @@ public class ItemHbItem {
     }
 
     public List<Item> findAll() {
-        return this.tx(
-            session -> session.createQuery("from Item").list()
-        );
+        Session session = sf.openSession();
+        session.beginTransaction();
+        List result = session.createQuery("from Item").list();
+        session.getTransaction().commit();
+        session.close();
+                return result;
     }
 
     public List<Item> findAlldone() {
