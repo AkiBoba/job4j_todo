@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.todo.model.Item;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.ItemDbService;
 import ru.job4j.todo.store.ItemHbItem;
 
@@ -25,7 +26,13 @@ public class ItemController {
     }
 
     @GetMapping("/items")
-    public String index(Model model) {
+    public String candidates(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = new User();
+            user.setName("Гость");
+        }
+        model.addAttribute("user", user);
         model.addAttribute("items", itemDbService.findAll());
         return "items";
     }
@@ -43,16 +50,18 @@ public class ItemController {
     }
 
     @PostMapping("/addItem")
-    public String addPost(Model model) {
-        model.addAttribute("item", new Item(0, "Заполните поле", true));
+    public String addPost(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        model.addAttribute("item", new Item(0, "Заполните поле", true, user));
         return "addItem";
     }
 
     @PostMapping("/createItem")
-    public String createItem(HttpServletRequest req) {
+    public String createItem(HttpServletRequest req, HttpSession session) {
+        User user = (User) session.getAttribute("user");
         String description = req.getParameter("description");
         Boolean done = Boolean.valueOf(req.getParameter("done"));
-        itemDbService.add(new Item(1, description, done));
+        itemDbService.add(new Item(1, description, done, user));
         return "redirect:/items";
     }
 

@@ -18,31 +18,19 @@ public class Item implements Comparable<Item> {
     private LocalDateTime created = LocalDateTime.now();
     private boolean done;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Item() {
     }
 
-    public Item(int id, String description, LocalDateTime localDateTime, boolean done) {
+    public Item(int id, String description, boolean done, User user) {
         this.id = id;
         this.description = description;
         this.created = LocalDateTime.now();
         this.done = done;
-    }
-
-    public Item(int id, String description, LocalDateTime created) {
-        this.id = id;
-        this.description = description;
-        this.created = LocalDateTime.now();
-    }
-
-    public Item(int id, String description, boolean done) {
-        this.id = id;
-        this.description = description;
-        this.done = done;
-    }
-
-    public Item(int id, String description) {
-        this.id = id;
-        this.description = description;
+        this.user = user;
     }
 
     @Override
@@ -98,5 +86,13 @@ public class Item implements Comparable<Item> {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

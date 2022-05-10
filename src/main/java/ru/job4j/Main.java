@@ -1,6 +1,5 @@
 package ru.job4j;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -8,10 +7,6 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Properties;
 
 @SpringBootApplication
 public class Main {

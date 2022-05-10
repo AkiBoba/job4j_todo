@@ -1,104 +1,90 @@
 package ru.job4j.todo.store;
 
+
 import net.jcip.annotations.ThreadSafe;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import ru.job4j.todo.model.Item;
+import ru.job4j.todo.model.Role;
+import ru.job4j.todo.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @ThreadSafe
-public class ItemHbItem {
-
+public class UserStore {
     private final SessionFactory sf;
 
-    public ItemHbItem(SessionFactory sf) {
+    public UserStore(SessionFactory sf) {
         this.sf = sf;
     }
 
-    public Item add(Item item) {
+    public Optional<User> add(User user) {
         Session session = sf.openSession();
         session.beginTransaction();
-        session.save(item);
+        session.save(user);
         session.getTransaction().commit();
         session.close();
-        return item;
+        return Optional.ofNullable(user);
     }
 
-    public boolean update(Item item) {
+    public Role addRole(Role role) {
         Session session = sf.openSession();
         session.beginTransaction();
-        session.update(item);
+        session.save(role);
+        session.getTransaction().commit();
+        session.close();
+        return role;
+    }
+
+    public boolean update(User user) {
+        Session session = sf.openSession();
+        session.beginTransaction();
+        session.update(user);
         session.getTransaction().commit();
         session.close();
         return true;
     }
 
-    public boolean delete(int id) {
+    public void delete(int id) {
         Session session = sf.openSession();
         session.beginTransaction();
-        Item item = session.get(Item.class, id);
-        session.delete(item);
+        User user = session.get(User.class, id);
+        session.delete(user);
         session.getTransaction().commit();
         session.close();
-        return true;
     }
 
-    public List<Item> findAll() {
+    public List<User> findAll() {
         Session session = sf.openSession();
         session.beginTransaction();
-        List result = session.createQuery("from Item").list();
+        List result = session.createQuery("from User").list();
         session.getTransaction().commit();
         session.close();
         return result;
     }
 
-    public List<Item> findAlldone() {
-        List<Item> items;
+    public User findById(int id) {
         Session session = sf.openSession();
         session.beginTransaction();
-        Criteria criteria = session.createCriteria(Item.class, "Item");
-        criteria.add(Restrictions.eq("done", true));
-        items = criteria.list();
-        session.getTransaction().commit();
-        session.close();
-        return items;
-    }
-
-    public List<Item> newItems() {
-        List<Item> items;
-        Session session = sf.openSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(Item.class, "Item");
-        criteria.add(Restrictions.eq("done", false));
-        criteria.addOrder(Order.desc("created"));
-        items = criteria.list();
-        session.getTransaction().commit();
-        session.close();
-        return items;
-    }
-
-    public Item findById(int id) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        Item result = session.get(Item.class, id);
+        User result = session.get(User.class, id);
         session.getTransaction().commit();
         session.close();
         return result;
     }
 
-    public void done(int id) {
+    public Optional<User> findUserByEmailAndPwd(String email, String password) {
         Session session = sf.openSession();
         session.beginTransaction();
-        Item itmTmp = session.get(Item.class, id);
-        itmTmp.setDone(true);
-        session.update(itmTmp);
+        Criteria criteria = session.createCriteria(User.class, "User");
+        criteria.add(Restrictions.eq("password", password));
+        criteria.add(Restrictions.eq("email", email));
+        User user = (User) criteria.uniqueResult();
         session.getTransaction().commit();
         session.close();
+        return Optional.ofNullable(user);
     }
 }

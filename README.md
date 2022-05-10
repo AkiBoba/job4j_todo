@@ -9,3 +9,6 @@
 Класс Main.
 
 2. Создать TODO list [#3786] - on hiber исправление и доработка
+    
+    Mapping
+0. ToOne [#6873]

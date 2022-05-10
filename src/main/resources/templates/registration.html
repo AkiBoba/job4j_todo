@@ -1,5 +1,5 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -15,7 +15,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-    <title>Items ind</title>
+    <title>Работа мечты</title>
 </head>
 <body>
 <div class="container">
@@ -26,21 +26,25 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-item nav-link" th:href="@{/items}">Все</a>
-                <a class="nav-item nav-link" th:href="@{/}">Выполненные</a>
-                <a class="nav-item nav-link" th:href="@{/}">Новые</a>
-                <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
-                    <span th:text="${user.name}"></span>
-                    <span> | Войти</span>
-                </a>
-                <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/logout}">
-                    <span th:text="${user.name}"></span>
-                    <span> | Выйти</span>
-                </a>
+                <a class="nav-item nav-link active" th:href="@{/items}">Главная <span class="sr-only">(current)</span></a>
             </div>
         </div>
     </nav>
-    <div class="row">
+    <div class="row pt-3">
+        <div class="card" style="width: 100%">
+            <div class="card-header">
+                Регистрация нового пользователя
+            </div>
+            <div class="card-body">
+                <tr>
+                    <p th:text="${message}"></p>
+                    <div th:if="${mark != null}">
+                        <td><a class="nav-item nav-link" th:href="@{/addUser}">Введите другой email</a>
+                    </div>
+
+                    </tr>
+            </div>
+        </div>
     </div>
 </div>
 </body>
