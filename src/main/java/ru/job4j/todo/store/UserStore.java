@@ -25,10 +25,16 @@ public class UserStore {
     public Optional<User> add(User user) {
         Session session = sf.openSession();
         session.beginTransaction();
-        session.save(user);
-        session.getTransaction().commit();
-        session.close();
-        return Optional.ofNullable(user);
+        try {
+            session.save(user);
+            session.getTransaction().commit();
+        } catch (final Exception e) {
+            session.getTransaction().rollback();
+            return Optional.ofNullable(null);
+        } finally {
+            session.close();
+        }
+        return findUserByEmailAndPwd(user.getEmail(), user.getPassword());
     }
 
     public Role addRole(Role role) {
