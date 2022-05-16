@@ -37,6 +37,18 @@ public class ItemController {
         return "items";
     }
 
+    @GetMapping("/articles")
+    public String articles(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = new User();
+            user.setName("Гость");
+        }
+        model.addAttribute("user", user);
+        model.addAttribute("items", itemDbService.findAll());
+        return "input";
+    }
+
     @GetMapping("/done")
     public String done(Model model) {
        model.addAttribute("items", itemDbService.findAlldone());

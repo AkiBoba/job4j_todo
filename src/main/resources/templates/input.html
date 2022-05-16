@@ -15,7 +15,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-    <title>Items ind</title>
+    <title>Items</title>
 </head>
 <body>
 <div class="container">
@@ -27,9 +27,8 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-item nav-link" th:href="@{/items}">Все</a>
-                <a class="nav-item nav-link" th:href="@{/}">Выполненные</a>
-                <a class="nav-item nav-link" th:href="@{/}">Новые</a>
-                <a class="nav-item nav-link" th:href="@{/articles}">Articles</a>
+                <a class="nav-item nav-link" th:href="@{/done}">Выполненные</a>
+                <a class="nav-item nav-link" th:href="@{/newItems}">Новые</a>
                 <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
                     <span th:text="${user.name}"></span>
                     <span> | Войти</span>
@@ -42,6 +41,47 @@
         </div>
     </nav>
     <div class="row">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Description </th>
+                <th scope="col">Created </th>
+                <th scope="col">Done </th>
+                <th scope="col">User </th>
+            </tr>
+            </thead>
+        </table>
+            <tbody>
+
+            <div th:if="${#lists.size(items) != 0}" th:remove="tag">
+                <div class="title-list">
+                    <tr th:each="item: ${items}">
+                        <div class="form-group title-item">
+                            <input type="text" name="titleOther[]" class="form-control" th:value="${item.description}" maxlength="100" max="100">
+                            <br>
+                            <input type="text" name="titleOther1[]" class="form-control" th:value="${item.done}" maxlength="100" max="100">
+                            <br>
+                            <p><button type="button" id="addTitle" class="btn btn-secondary">Добавить еще</button>
+                                <button type="button" id="delTitle" class="btn btn-danger">Delete</button></p>
+                        </div>
+                    </tr>
+                </div>
+            </div>
+            <script type="text/javascript">
+                $('#addTitle').click(function(){
+                    var $input = $(".title-item").first().clone(); /*.clone().removeClass("title-item").appendTo(".title-list");*/
+                    $input.find('input').val('');
+                    $input.find(".form-control").text('');
+                    $input.find('button').removeAttr('id').attr('name', 'delTitle');
+                    $input.appendTo($(".title-list"));
+                });
+                $(document).on('click', 'button[name=delTitle]', function () {
+                    $(this).closest('.title-item').remove();
+                });
+            </script>
+
+            </tbody>
     </div>
 </div>
 </body>
