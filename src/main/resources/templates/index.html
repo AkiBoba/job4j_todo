@@ -29,7 +29,6 @@
                 <a class="nav-item nav-link" th:href="@{/items}">Все</a>
                 <a class="nav-item nav-link" th:href="@{/}">Выполненные</a>
                 <a class="nav-item nav-link" th:href="@{/}">Новые</a>
-                <a class="nav-item nav-link" th:href="@{/articles}">Articles</a>
                 <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
                     <span th:text="${user.name}"></span>
                     <span> | Войти</span>
