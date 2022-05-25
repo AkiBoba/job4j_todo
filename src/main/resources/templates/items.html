@@ -49,6 +49,7 @@
                 <th scope="col">Created </th>
                 <th scope="col">Done </th>
                 <th scope="col">User </th>
+                <th scope="col">Category </th>
             </tr>
             </thead>
             <tbody>
@@ -70,6 +71,13 @@
                 </td>
                 <td>
                     <span th:text="${item.user}"></span>
+                </td>
+                <td>
+<!--                    <div class="form-group">-->
+                        <select class="form-control" id="cat" name="cat" multiple="multiple" size="1">
+                            <option th:each="cat : ${cats}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                        </select>
+<!--                    </div>                    -->
                 </td>
             </tr>
 

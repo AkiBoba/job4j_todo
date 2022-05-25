@@ -1,10 +1,15 @@
 package ru.job4j.todo.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "item")
 public class Item implements Comparable<Item> {
@@ -21,6 +26,9 @@ public class Item implements Comparable<Item> {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Category> categoryes = new HashSet<>();
 
     public Item() {
     }

@@ -7,22 +7,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.CatService;
 import ru.job4j.todo.service.ItemDbService;
-import ru.job4j.todo.store.ItemHbItem;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @ThreadSafe
 public class ItemController {
 
     private final ItemDbService itemDbService;
+    private final CatService catService;
 
-    public ItemController(ItemDbService itemDbService) {
+    public ItemController(ItemDbService itemDbService, CatService catService) {
         this.itemDbService = itemDbService;
+        this.catService = catService;
     }
 
     @GetMapping("/items")
@@ -34,6 +39,7 @@ public class ItemController {
         }
         model.addAttribute("user", user);
         model.addAttribute("items", itemDbService.findAll());
+        model.addAttribute("cats", catService.findAll());
         return "items";
     }
 
@@ -53,6 +59,7 @@ public class ItemController {
     public String addPost(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         model.addAttribute("item", new Item(0, "Заполните поле", true, user));
+        model.addAttribute("cats", catService.findAll());
         return "addItem";
     }
 
@@ -60,8 +67,16 @@ public class ItemController {
     public String createItem(HttpServletRequest req, HttpSession session) {
         User user = (User) session.getAttribute("user");
         String description = req.getParameter("description");
-        Boolean done = Boolean.valueOf(req.getParameter("done"));
-        itemDbService.add(new Item(1, description, done, user));
+        boolean done = Boolean.parseBoolean(req.getParameter("done"));
+        String[] cats = req.getParameterValues("cat");
+        Item item = new Item(1, description, done, user);
+        Arrays.stream(cats).forEach(cat -> item
+                .getCategoryes()
+                .add(catService
+                        .findById(Integer.parseInt(cat))
+                )
+            );
+        itemDbService.add(item);
         return "redirect:/items";
     }
 

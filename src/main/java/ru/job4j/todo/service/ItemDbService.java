@@ -3,6 +3,7 @@ package ru.job4j.todo.service;
 
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.store.ItemHbItem;
 
@@ -25,8 +26,8 @@ public class ItemDbService {
 
     }
 
-    public void add(Item item) {
-        store.add(item);
+    public Item add(Item item) {
+        return store.add(item);
 
     }
 
