@@ -7,7 +7,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Item;
 
 import java.util.List;
@@ -20,6 +19,19 @@ public class ItemHbItem {
 
     public ItemHbItem(SessionFactory sf) {
         this.sf = sf;
+    }
+
+    public List getItems() {
+        List list;
+        try (Session session = sf.openSession()
+        ) {
+            session.beginTransaction();
+            list = session.createQuery(
+                    "select distinct it from Item it join fetch it.categoryes"
+            ).list();
+            session.getTransaction().commit();
+        }
+        return list;
     }
 
     public Item add(Item item) {

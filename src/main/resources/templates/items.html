@@ -49,6 +49,7 @@
                 <th scope="col">Created </th>
                 <th scope="col">Done </th>
                 <th scope="col">User </th>
+                <th scope="col">Category </th>
             </tr>
             </thead>
             <tbody>
@@ -57,8 +58,8 @@
                 <td th:text="${item.id}"></td>
                     <td><div class="col-sm-2">
                         <a th:href="@{|/item/${item.id}|}">
-                            <i class="fa fa-edit"></i>
-                            <b><span th:text="${item.description}"></span></b>
+                            <em class="fa fa-edit"></em>
+                            <strong><span th:text="${item.description}"></span></strong>
                         </a>
                     </div>
                 </td>
@@ -70,6 +71,11 @@
                 </td>
                 <td>
                     <span th:text="${item.user}"></span>
+                </td>
+                <td>
+                    <select class="form-control" id="cat" name="cat" multiple="multiple" size="3">
+                        <option th:each="cat : ${item.categoryes}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                    </select>
                 </td>
             </tr>
 

@@ -38,8 +38,7 @@ public class ItemController {
             user.setName("Гость");
         }
         model.addAttribute("user", user);
-        model.addAttribute("items", itemDbService.findAll());
-        model.addAttribute("cats", catService.findAll());
+        model.addAttribute("items", itemDbService.getItems());
         return "items";
     }
 

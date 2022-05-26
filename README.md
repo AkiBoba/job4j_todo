@@ -22,3 +22,5 @@
 
 В этом задании нужно использовать однонаправленную взять: item -> category.
 6. Категории в TODO List [#331991] 
+скрины для задачи 
+https://github.com/AkiBoba/job4j_todo/commit/d8c3813507ec69f94248a7764393f80bbef389cc
