@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Item;
 
 import java.util.List;
+import java.util.TimeZone;
 
 @Repository
 @ThreadSafe
@@ -35,7 +36,9 @@ public class ItemHbItem {
     }
 
     public Item add(Item item) {
-        Session session = sf.openSession();
+        Session session = sf.withOptions()
+                .jdbcTimeZone(TimeZone.getTimeZone("UTC"))
+                .openSession();
         session.beginTransaction();
         session.save(item);
         session.getTransaction().commit();

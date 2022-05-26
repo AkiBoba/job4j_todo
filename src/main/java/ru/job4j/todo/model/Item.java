@@ -3,8 +3,9 @@ package ru.job4j.todo.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -20,7 +21,8 @@ public class Item implements Comparable<Item> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String description;
-    private LocalDateTime created = LocalDateTime.now();
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created;
     private boolean done;
 
     @ManyToOne
@@ -36,7 +38,7 @@ public class Item implements Comparable<Item> {
     public Item(int id, String description, boolean done, User user) {
         this.id = id;
         this.description = description;
-        this.created = LocalDateTime.now();
+        this.created = new Date(System.currentTimeMillis());
         this.done = done;
         this.user = user;
     }
@@ -72,7 +74,7 @@ public class Item implements Comparable<Item> {
         return description;
     }
 
-    public LocalDateTime getCreated() {
+    public Date getCreated() {
         return created;
     }
 
@@ -84,7 +86,7 @@ public class Item implements Comparable<Item> {
         this.description = description;
     }
 
-    public void setCreated(LocalDateTime created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
