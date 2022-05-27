@@ -22,6 +22,9 @@
 
 В этом задании нужно использовать однонаправленную взять: item -> category.
 6. Категории в TODO List [#331991] 
-скрины для задачи 
-https://github.com/AkiBoba/job4j_todo/commit/d8c3813507ec69f94248a7764393f80bbef389cc
+скрины для задачи
+![alt text](https://github.com/AkiBoba/job4j_todo/blob/hiber/items/2022-05-26_09-26-00.png)
+![alt text](https://github.com/AkiBoba/job4j_todo/blob/hiber/items/2022-05-26_09-27-52.png)
+![alt text](https://github.com/AkiBoba/job4j_todo/blob/hiber/items/2022-05-26_09-29-11.png)
+![alt text](https://github.com/AkiBoba/job4j_todo/blob/hiber/items/2022-05-26_20-16-37.png)
 5. Date
